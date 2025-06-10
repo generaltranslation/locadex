@@ -1,0 +1,28 @@
+{
+  "name": "locadex-action",
+  "version": "0.0.1",
+  "description": "GitHub Action for Locadex i18n automation",
+  "main": "dist/action.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "build:clean": "rm -rf dist && npm run build",
+    "package": "npm run build:clean && ncc build dist/action.js -o dist --source-map --license licenses.txt"
+  },
+  "dependencies": {
+    "@actions/core": "^1.11.1",
+    "@actions/exec": "^1.1.1",
+    "locadex": "^0.0.2-alpha.7"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@vercel/ncc": "^0.38.1",
+    "typescript": "^5.7.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/generaltranslation/gt.git"
+  },
+  "author": "General Translation, Inc.",
+  "license": "FSL-1.1-ALv2"
+}

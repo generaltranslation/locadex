@@ -1,0 +1,41 @@
+name: 'Locadex Action'
+description: 'Github Action integration for Locadex'
+author: 'generaltranslation'
+branding:
+  icon: 'globe'
+  color: 'blue'
+
+inputs:
+  api_key:
+    description: 'Locadex API key'
+    required: true
+  batch_size:
+    description: 'File batch size'
+    required: false
+    default: '10'
+  max_concurrent:
+    description: 'Max number of concurrent agents'
+    required: false
+    default: '1'
+  no_telemetry:
+    description: 'Disable telemetry'
+    required: false
+    default: 'false'
+  verbose:
+    description: 'Enable verbose output'
+    required: false
+    default: 'false'
+  debug:
+    description: 'Enable debug output'
+    required: false
+    default: 'false'
+  match_files:
+    description: 'Comma-separated list of glob patterns to match source files'
+    required: false
+  extensions:
+    description: 'Comma-separated list of file extensions to match'
+    required: false
+
+runs:
+  using: 'node20'
+  main: 'dist/action.js'
