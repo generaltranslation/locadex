@@ -21,7 +21,7 @@ describe('GitHub Action', () => {
       return '';
     });
 
-    const { run } = await import('./action');
+    const { run } = await import('../src/action');
     await run();
 
     expect(mockCore.getInput).toHaveBeenCalledWith('api_key', {
@@ -39,7 +39,7 @@ describe('GitHub Action', () => {
       return '';
     });
 
-    const { run } = await import('./action');
+    const { run } = await import('../src/action');
     await run();
 
     expect(mockExec).toHaveBeenCalledWith('npx', ['locadex', 'i18n']);
@@ -55,7 +55,7 @@ describe('GitHub Action', () => {
       return false;
     });
 
-    const { run } = await import('./action');
+    const { run } = await import('../src/action');
     await run();
 
     expect(mockExec).toHaveBeenCalledWith('npx', [
@@ -75,7 +75,7 @@ describe('GitHub Action', () => {
       return false;
     });
 
-    const { run } = await import('./action');
+    const { run } = await import('../src/action');
     await run();
 
     expect(mockExec).toHaveBeenCalledWith('npx', [
@@ -92,7 +92,7 @@ describe('GitHub Action', () => {
       return '';
     });
 
-    const { run } = await import('./action');
+    const { run } = await import('../src/action');
     await run();
 
     expect(mockExec).toHaveBeenCalledWith('npx', [
@@ -110,7 +110,7 @@ describe('GitHub Action', () => {
     });
     mockExec.mockRejectedValue(new Error('Command failed'));
 
-    const { run } = await import('./action');
+    const { run } = await import('../src/action');
     await run();
 
     expect(mockCore.setFailed).toHaveBeenCalledWith(

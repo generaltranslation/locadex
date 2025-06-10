@@ -8,7 +8,7 @@
   "scripts": {
     "build": "tsc",
     "build:clean": "rm -rf dist && npm run build",
-    "package": "npm run build:clean && ncc build dist/action.js -o dist --source-map --license licenses.txt",
+    "package": "npm run build:clean && ncc build dist/action.js -o dist",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
@@ -17,6 +17,10 @@
     "format": "prettier --write .",
     "release": "changeset publish"
   },
+  "files": [
+    "dist",
+    "CHANGELOG.md"
+  ],
   "dependencies": {
     "@actions/core": "^1.11.1",
     "@actions/exec": "^1.1.1",
