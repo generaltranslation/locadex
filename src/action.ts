@@ -2,8 +2,8 @@
 
 import * as core from '@actions/core';
 import { exec } from '@actions/exec';
-
 export async function run(): Promise<void> {
+  core.info('Locadex i18n action started');
   try {
     // Get inputs
     const apiKey = core.getInput('api_key', { required: true });
