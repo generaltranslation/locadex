@@ -13,7 +13,8 @@
     "test:ui": "vitest --ui",
     "lint": "eslint src/**/*.ts",
     "lint:fix": "eslint src/**/*.ts --fix",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "release": "changeset publish"
   },
   "dependencies": {
     "@actions/core": "^1.11.1",
