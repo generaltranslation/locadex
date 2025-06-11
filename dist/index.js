@@ -31724,7 +31724,7 @@ var __webpack_exports__ = {};
 
 
 
-const locadexVersion = '0.1.0-alpha.9';
+const locadexVersion = '0.1.0-alpha.10';
 async function run() {
     _actions_core__WEBPACK_IMPORTED_MODULE_0__.info('Locadex i18n action started');
     try {
@@ -31738,12 +31738,18 @@ async function run() {
         const extensions = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('extensions');
         const noTelemetry = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getBooleanInput('no_telemetry');
         const githubToken = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('github_token');
+        const workingDirectory = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('root_directory');
         // PR inputs
         const prBranch = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('pr_branch');
         const prTitle = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('pr_title');
         const prBody = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('pr_body');
         // Set API key as environment variable
         _actions_core__WEBPACK_IMPORTED_MODULE_0__.exportVariable('ANTHROPIC_API_KEY', apiKey);
+        // Set working directory options
+        const execOptions = workingDirectory ? { cwd: workingDirectory } : {};
+        if (workingDirectory) {
+            _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Running commands in directory: ${workingDirectory}`);
+        }
         // Build command arguments
         const installArgs = ['npm', 'install', '-g', `locadex@${locadexVersion}`];
         await (0,_actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec)(installArgs[0], installArgs.slice(1));
@@ -31770,7 +31776,7 @@ async function run() {
         }
         _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Running command: ${args.join(' ')}`);
         // Execute the command
-        await (0,_actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec)(args[0], args.slice(1));
+        await (0,_actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec)(args[0], args.slice(1), execOptions);
         _actions_core__WEBPACK_IMPORTED_MODULE_0__.info('Locadex i18n action completed successfully');
         await createPR(githubToken, prBranch, prTitle, prBody);
     }
@@ -31782,18 +31788,45 @@ async function findAvailableBranchName(baseName) {
     let branchName = baseName;
     let counter = 1;
     while (true) {
+        const branchExists = await checkBranchExists(branchName);
+        if (!branchExists) {
+            return branchName;
+        }
+        branchName = `${baseName}-${counter}`;
+        counter++;
+    }
+}
+async function checkBranchExists(branchName) {
+    try {
+        // Fetch remote refs to ensure we have up-to-date branch info
+        await (0,_actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec)('git', ['fetch', 'origin', '--prune']);
+    }
+    catch {
+        // If fetch fails, continue with local check only
+    }
+    try {
+        // Check local branch
+        await (0,_actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec)('git', [
+            'show-ref',
+            '--verify',
+            '--quiet',
+            `refs/heads/${branchName}`,
+        ]);
+        return true;
+    }
+    catch {
         try {
+            // Check remote branch
             await (0,_actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec)('git', [
                 'show-ref',
                 '--verify',
                 '--quiet',
-                `refs/heads/${branchName}`,
+                `refs/remotes/origin/${branchName}`,
             ]);
-            branchName = `${baseName}-${counter}`;
-            counter++;
+            return true;
         }
         catch {
-            return branchName;
+            return false;
         }
     }
 }
