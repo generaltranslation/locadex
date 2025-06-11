@@ -1,5 +1,5 @@
 {
-  "name": "locadex-action",
+  "name": "@generaltranslation/locadex-action",
   "version": "0.0.2",
   "description": "GitHub Action for Locadex i18n automation",
   "main": "dist/action.js",

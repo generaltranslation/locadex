@@ -35,6 +35,10 @@ jobs:
       - name: Build action
         run: npm run package
 
+      - name: Configure git remote
+        run: |
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+
       - name: Create Release Pull Request or publish to github
         id: changesets
         uses: changesets/action@v1
