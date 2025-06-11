@@ -1,5 +1,11 @@
 # locadex-action
 
+## 0.0.3
+
+### Patch Changes
+
+- [#8](https://github.com/generaltranslation/locadex/pull/8) [`54e4760`](https://github.com/generaltranslation/locadex/commit/54e47600ac7b156c2c4d74668fefaaf40ae056b6) Thanks [@brian-lou](https://github.com/brian-lou)! - Cleanup configs & releases
+
 ## 0.0.2
 
 ### Patch Changes
