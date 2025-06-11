@@ -16,10 +16,6 @@
     "format": "prettier --write .",
     "release": "tsx scripts/publish.ts"
   },
-  "files": [
-    "dist",
-    "CHANGELOG.md"
-  ],
   "dependencies": {
     "@actions/core": "^1.11.1",
     "@actions/exec": "^1.1.1",
