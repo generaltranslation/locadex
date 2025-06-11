@@ -1,3 +1,4 @@
+// This file is MIT licensed and taken from https://raw.githubusercontent.com/changesets/action/04d574e831923498156e0b2b93152878063203a3/scripts/release.ts
 import { exec, getExecOutput } from '@actions/exec';
 import path from 'node:path';
 
