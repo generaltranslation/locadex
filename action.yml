@@ -35,6 +35,10 @@ inputs:
   extensions:
     description: 'Comma-separated list of file extensions to match'
     required: false
+  github_token:
+    description: 'GitHub token for creating pull requests'
+    required: false
+    default: ${{ github.token }}
 
 runs:
   using: 'node20'

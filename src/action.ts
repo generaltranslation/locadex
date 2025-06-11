@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 
 import * as core from '@actions/core';
+import * as github from '@actions/github';
 import { exec } from '@actions/exec';
+
 export async function run(): Promise<void> {
   core.info('Locadex i18n action started');
   try {
@@ -14,6 +16,7 @@ export async function run(): Promise<void> {
     const matchFiles = core.getInput('match_files');
     const extensions = core.getInput('extensions');
     const noTelemetry = core.getBooleanInput('no_telemetry');
+    const githubToken = core.getInput('github_token');
 
     // Set API key as environment variable
     core.exportVariable('ANTHROPIC_API_KEY', apiKey);
@@ -45,9 +48,55 @@ export async function run(): Promise<void> {
     await exec(args[0], args.slice(1));
 
     core.info('Locadex i18n action completed successfully');
+
+    await createPR(githubToken);
   } catch (error) {
     core.setFailed(`Action failed with error: ${error}`);
   }
+}
+
+async function createPR(githubToken: string): Promise<void> {
+  // Check for changes using git status
+  let hasChanges = false;
+  try {
+    await exec('git', ['diff', '--quiet']);
+  } catch {
+    hasChanges = true;
+  }
+
+  if (!hasChanges) {
+    core.info('No changes detected');
+    return;
+  }
+
+  const context = github.context;
+  const octokit = github.getOctokit(githubToken);
+  const currentBranch = context.ref.replace('refs/heads/', '');
+  const prBranch = `${currentBranch}/locadex`;
+
+  // Configure git and commit
+  await exec('git', ['config', 'user.name', 'github-actions[bot]']);
+  await exec('git', [
+    'config',
+    'user.email',
+    '41898282+github-actions[bot]@users.noreply.github.com',
+  ]);
+  await exec('git', ['checkout', '-b', prBranch]);
+  await exec('git', ['add', '.']);
+  await exec('git', ['commit', '-m', 'chore: update translations via Locadex']);
+  await exec('git', ['push', 'origin', prBranch]);
+
+  // Create PR
+  const { data: pr } = await octokit.rest.pulls.create({
+    owner: context.repo.owner,
+    repo: context.repo.repo,
+    title: `🌐 Update translations (${currentBranch})`,
+    body: 'Automated translation updates via Locadex',
+    head: prBranch,
+    base: currentBranch,
+  });
+
+  core.info(`Created PR: ${pr.html_url}`);
 }
 
 run();
