@@ -31791,6 +31791,12 @@ async function createPR(githubToken) {
     const octokit = _actions_github__WEBPACK_IMPORTED_MODULE_1__.getOctokit(githubToken);
     const currentBranch = context.ref.replace('refs/heads/', '');
     const prBranch = `locadex/${currentBranch}`;
+    await (0,_actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec)('git', ['config', 'user.name', 'github-actions[bot]']);
+    await (0,_actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec)('git', [
+        'config',
+        'user.email',
+        '41898282+github-actions[bot]@users.noreply.github.com',
+    ]);
     await (0,_actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec)('git', ['checkout', '-b', prBranch]);
     await (0,_actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec)('git', ['add', '.']);
     await (0,_actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec)('git', ['commit', '-m', 'chore: update translations via Locadex']);
