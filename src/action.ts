@@ -4,7 +4,7 @@ import * as core from '@actions/core';
 import * as github from '@actions/github';
 import { exec } from '@actions/exec';
 
-const locadexVersion = '0.1.0-alpha.8';
+const locadexVersion = '0.1.0-alpha.9';
 
 export async function run(): Promise<void> {
   core.info('Locadex i18n action started');
@@ -19,6 +19,11 @@ export async function run(): Promise<void> {
     const extensions = core.getInput('extensions');
     const noTelemetry = core.getBooleanInput('no_telemetry');
     const githubToken = core.getInput('github_token');
+
+    // PR inputs
+    const prBranch = core.getInput('pr_branch');
+    const prTitle = core.getInput('pr_title');
+    const prBody = core.getInput('pr_body');
 
     // Set API key as environment variable
     core.exportVariable('ANTHROPIC_API_KEY', apiKey);
@@ -55,13 +60,18 @@ export async function run(): Promise<void> {
 
     core.info('Locadex i18n action completed successfully');
 
-    await createPR(githubToken);
+    await createPR(githubToken, prBranch, prTitle, prBody);
   } catch (error) {
     core.setFailed(`Action failed with error: ${error}`);
   }
 }
 
-async function createPR(githubToken: string): Promise<void> {
+async function createPR(
+  githubToken: string,
+  prBranch: string,
+  prTitle: string,
+  prBody: string
+): Promise<void> {
   // Check for changes using git status
   let hasChanges = false;
   try {
@@ -77,8 +87,6 @@ async function createPR(githubToken: string): Promise<void> {
 
   const context = github.context;
   const octokit = github.getOctokit(githubToken);
-  const currentBranch = context.ref.replace('refs/heads/', '');
-  const prBranch = `locadex/${currentBranch}`;
 
   await exec('git', ['config', 'user.name', 'github-actions[bot]']);
   await exec('git', [
@@ -88,17 +96,17 @@ async function createPR(githubToken: string): Promise<void> {
   ]);
   await exec('git', ['checkout', '-b', prBranch]);
   await exec('git', ['add', '.']);
-  await exec('git', ['commit', '-m', 'chore: update translations via Locadex']);
+  await exec('git', ['commit', '-m', 'chore(locadex): update code']);
   await exec('git', ['push', 'origin', prBranch]);
 
   // Create PR
   const { data: pr } = await octokit.rest.pulls.create({
     owner: context.repo.owner,
     repo: context.repo.repo,
-    title: `🌐 Update translations (${currentBranch})`,
-    body: 'Automated translation updates via Locadex',
+    title: prTitle,
+    body: prBody,
     head: prBranch,
-    base: currentBranch,
+    base: context.ref,
   });
 
   core.info(`Created PR: ${pr.html_url}`);

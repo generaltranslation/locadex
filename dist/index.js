@@ -31724,7 +31724,7 @@ var __webpack_exports__ = {};
 
 
 
-const locadexVersion = '0.1.0-alpha.8';
+const locadexVersion = '0.1.0-alpha.9';
 async function run() {
     _actions_core__WEBPACK_IMPORTED_MODULE_0__.info('Locadex i18n action started');
     try {
@@ -31738,6 +31738,10 @@ async function run() {
         const extensions = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('extensions');
         const noTelemetry = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getBooleanInput('no_telemetry');
         const githubToken = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('github_token');
+        // PR inputs
+        const prBranch = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('pr_branch');
+        const prTitle = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('pr_title');
+        const prBody = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('pr_body');
         // Set API key as environment variable
         _actions_core__WEBPACK_IMPORTED_MODULE_0__.exportVariable('ANTHROPIC_API_KEY', apiKey);
         // Build command arguments
@@ -31768,13 +31772,13 @@ async function run() {
         // Execute the command
         await (0,_actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec)(args[0], args.slice(1));
         _actions_core__WEBPACK_IMPORTED_MODULE_0__.info('Locadex i18n action completed successfully');
-        await createPR(githubToken);
+        await createPR(githubToken, prBranch, prTitle, prBody);
     }
     catch (error) {
         _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(`Action failed with error: ${error}`);
     }
 }
-async function createPR(githubToken) {
+async function createPR(githubToken, prBranch, prTitle, prBody) {
     // Check for changes using git status
     let hasChanges = false;
     try {
@@ -31789,8 +31793,6 @@ async function createPR(githubToken) {
     }
     const context = _actions_github__WEBPACK_IMPORTED_MODULE_1__.context;
     const octokit = _actions_github__WEBPACK_IMPORTED_MODULE_1__.getOctokit(githubToken);
-    const currentBranch = context.ref.replace('refs/heads/', '');
-    const prBranch = `locadex/${currentBranch}`;
     await (0,_actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec)('git', ['config', 'user.name', 'github-actions[bot]']);
     await (0,_actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec)('git', [
         'config',
@@ -31799,16 +31801,16 @@ async function createPR(githubToken) {
     ]);
     await (0,_actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec)('git', ['checkout', '-b', prBranch]);
     await (0,_actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec)('git', ['add', '.']);
-    await (0,_actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec)('git', ['commit', '-m', 'chore: update translations via Locadex']);
+    await (0,_actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec)('git', ['commit', '-m', 'chore(locadex): update code']);
     await (0,_actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec)('git', ['push', 'origin', prBranch]);
     // Create PR
     const { data: pr } = await octokit.rest.pulls.create({
         owner: context.repo.owner,
         repo: context.repo.repo,
-        title: `🌐 Update translations (${currentBranch})`,
-        body: 'Automated translation updates via Locadex',
+        title: prTitle,
+        body: prBody,
         head: prBranch,
-        base: currentBranch,
+        base: context.ref,
     });
     _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Created PR: ${pr.html_url}`);
 }
