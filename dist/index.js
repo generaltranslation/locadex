@@ -31724,7 +31724,7 @@ var __webpack_exports__ = {};
 
 
 
-const locadexVersion = '0.1.0-alpha.4';
+const locadexVersion = '0.1.0-alpha.5';
 async function run() {
     _actions_core__WEBPACK_IMPORTED_MODULE_0__.info('Locadex i18n action started');
     try {
