@@ -4,7 +4,7 @@ import * as core from '@actions/core';
 import * as github from '@actions/github';
 import { exec } from '@actions/exec';
 
-const locadexVersion = '0.1.0-alpha.9';
+const locadexVersion = '0.1.0-alpha.10';
 
 export async function run(): Promise<void> {
   core.info('Locadex i18n action started');
@@ -19,6 +19,7 @@ export async function run(): Promise<void> {
     const extensions = core.getInput('extensions');
     const noTelemetry = core.getBooleanInput('no_telemetry');
     const githubToken = core.getInput('github_token');
+    const workingDirectory = core.getInput('root_directory');
 
     // PR inputs
     const prBranch = core.getInput('pr_branch');
@@ -27,6 +28,12 @@ export async function run(): Promise<void> {
 
     // Set API key as environment variable
     core.exportVariable('ANTHROPIC_API_KEY', apiKey);
+
+    // Set working directory options
+    const execOptions = workingDirectory ? { cwd: workingDirectory } : {};
+    if (workingDirectory) {
+      core.info(`Running commands in directory: ${workingDirectory}`);
+    }
 
     // Build command arguments
     const installArgs = ['npm', 'install', '-g', `locadex@${locadexVersion}`];
@@ -56,7 +63,7 @@ export async function run(): Promise<void> {
     core.info(`Running command: ${args.join(' ')}`);
 
     // Execute the command
-    await exec(args[0], args.slice(1));
+    await exec(args[0], args.slice(1), execOptions);
 
     core.info('Locadex i18n action completed successfully');
 
@@ -71,23 +78,50 @@ async function findAvailableBranchName(baseName: string): Promise<string> {
   let counter = 1;
 
   while (true) {
+    const branchExists = await checkBranchExists(branchName);
+    if (!branchExists) {
+      return branchName;
+    }
+    branchName = `${baseName}-${counter}`;
+    counter++;
+  }
+}
+
+async function checkBranchExists(branchName: string): Promise<boolean> {
+  try {
+    // Fetch remote refs to ensure we have up-to-date branch info
+    await exec('git', ['fetch', 'origin', '--prune']);
+  } catch {
+    // If fetch fails, continue with local check only
+  }
+
+  try {
+    // Check local branch
+    await exec('git', [
+      'show-ref',
+      '--verify',
+      '--quiet',
+      `refs/heads/${branchName}`,
+    ]);
+    return true;
+  } catch {
     try {
+      // Check remote branch
       await exec('git', [
         'show-ref',
         '--verify',
         '--quiet',
-        `refs/heads/${branchName}`,
+        `refs/remotes/origin/${branchName}`,
       ]);
-      branchName = `${baseName}-${counter}`;
-      counter++;
+      return true;
     } catch {
-      return branchName;
+      return false;
     }
   }
 }
 
 async function prExists(
-  octokit: any,
+  octokit: ReturnType<typeof github.getOctokit>,
   owner: string,
   repo: string,
   head: string

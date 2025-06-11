@@ -37,6 +37,9 @@ inputs:
     description: 'GitHub token for creating pull requests'
     required: false
     default: ${{ github.token }}
+  root_directory:
+    description: 'Root directory to run Locadex in (useful for monorepos)'
+    required: false
   pr_branch:
     description: 'Branch name for pull requests'
     required: false
