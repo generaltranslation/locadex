@@ -66,6 +66,45 @@ export async function run(): Promise<void> {
   }
 }
 
+async function findAvailableBranchName(baseName: string): Promise<string> {
+  let branchName = baseName;
+  let counter = 1;
+
+  while (true) {
+    try {
+      await exec('git', [
+        'show-ref',
+        '--verify',
+        '--quiet',
+        `refs/heads/${branchName}`,
+      ]);
+      branchName = `${baseName}-${counter}`;
+      counter++;
+    } catch {
+      return branchName;
+    }
+  }
+}
+
+async function prExists(
+  octokit: any,
+  owner: string,
+  repo: string,
+  head: string
+): Promise<boolean> {
+  try {
+    const { data: prs } = await octokit.rest.pulls.list({
+      owner,
+      repo,
+      head: `${owner}:${head}`,
+      state: 'open',
+    });
+    return prs.length > 0;
+  } catch {
+    return false;
+  }
+}
+
 async function createPR(
   githubToken: string,
   prBranch: string,
@@ -94,10 +133,27 @@ async function createPR(
     'user.email',
     '41898282+github-actions[bot]@users.noreply.github.com',
   ]);
-  await exec('git', ['checkout', '-b', prBranch]);
+
+  const availableBranchName = await findAvailableBranchName(prBranch);
+
+  await exec('git', ['checkout', '-b', availableBranchName]);
   await exec('git', ['add', '.']);
   await exec('git', ['commit', '-m', 'chore(locadex): update code']);
-  await exec('git', ['push', 'origin', prBranch]);
+  await exec('git', ['push', 'origin', availableBranchName]);
+
+  const prAlreadyExists = await prExists(
+    octokit,
+    context.repo.owner,
+    context.repo.repo,
+    availableBranchName
+  );
+
+  if (prAlreadyExists) {
+    core.info(
+      `PR already exists for branch ${availableBranchName}, skipping PR creation`
+    );
+    return;
+  }
 
   // Create PR
   const { data: pr } = await octokit.rest.pulls.create({
@@ -105,7 +161,7 @@ async function createPR(
     repo: context.repo.repo,
     title: prTitle,
     body: prBody,
-    head: prBranch,
+    head: availableBranchName,
     base: context.ref,
   });
 
