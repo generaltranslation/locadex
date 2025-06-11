@@ -37,6 +37,33 @@ inputs:
     description: 'GitHub token for creating pull requests'
     required: false
     default: ${{ github.token }}
+  pr_branch:
+    description: 'Branch name for pull requests'
+    required: false
+    default: 'locadex/${{ github.ref_name }}'
+  pr_title:
+    description: 'Title for pull requests'
+    required: false
+    default: 'Locadex: Continuous i18n for ${{ github.ref_name }}'
+  pr_body:
+    description: 'Body for pull requests'
+    required: false
+    default: |
+      ## 🌍 Locadex i18n Update
+
+      This is an **automated pull request** created by [Locadex](https://generaltranslation.com/docs/locadex).
+
+      ### What's included
+      - Internationalized files that were modified in the base branch
+      - Translation updates based on your latest changes
+
+      ### Next steps
+      1. Review the code for accuracy
+      2. Test the changes in your development environment  
+      3. Merge when ready to deploy internationalized content
+
+      ---
+      *Generated automatically by Locadex continuous i18n*
 
 runs:
   using: 'node20'
