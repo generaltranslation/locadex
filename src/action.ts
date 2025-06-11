@@ -63,7 +63,7 @@ async function createPR(githubToken: string): Promise<void> {
   } catch {
     hasChanges = true;
   }
-  
+
   if (!hasChanges) {
     core.info('No changes detected');
     return;
@@ -76,7 +76,11 @@ async function createPR(githubToken: string): Promise<void> {
 
   // Configure git and commit
   await exec('git', ['config', 'user.name', 'github-actions[bot]']);
-  await exec('git', ['config', 'user.email', '41898282+github-actions[bot]@users.noreply.github.com']);
+  await exec('git', [
+    'config',
+    'user.email',
+    '41898282+github-actions[bot]@users.noreply.github.com',
+  ]);
   await exec('git', ['checkout', '-b', prBranch]);
   await exec('git', ['add', '.']);
   await exec('git', ['commit', '-m', 'chore: update translations via Locadex']);
@@ -89,7 +93,7 @@ async function createPR(githubToken: string): Promise<void> {
     title: `🌐 Update translations (${currentBranch})`,
     body: 'Automated translation updates via Locadex',
     head: prBranch,
-    base: currentBranch
+    base: currentBranch,
   });
 
   core.info(`Created PR: ${pr.html_url}`);
