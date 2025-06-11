@@ -4,6 +4,8 @@ import * as core from '@actions/core';
 import * as github from '@actions/github';
 import { exec } from '@actions/exec';
 
+const locadexVersion = '0.1.0-alpha.1';
+
 export async function run(): Promise<void> {
   core.info('Locadex i18n action started');
   try {
@@ -22,7 +24,7 @@ export async function run(): Promise<void> {
     core.exportVariable('ANTHROPIC_API_KEY', apiKey);
 
     // Build command arguments
-    const args = ['npx', 'locadex', 'i18n'];
+    const args = ['npx', `locadex@${locadexVersion}`, 'i18n'];
 
     if (verbose) args.push('--verbose');
     if (debug) args.push('--debug');
