@@ -12,11 +12,9 @@ inputs:
   batch_size:
     description: 'File batch size'
     required: false
-    default: '10'
   max_concurrent:
     description: 'Max number of concurrent agents'
     required: false
-    default: '1'
   no_telemetry:
     description: 'Disable telemetry'
     required: false
