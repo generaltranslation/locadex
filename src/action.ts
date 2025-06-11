@@ -80,6 +80,12 @@ async function createPR(githubToken: string): Promise<void> {
   const currentBranch = context.ref.replace('refs/heads/', '');
   const prBranch = `locadex/${currentBranch}`;
 
+  await exec('git', ['config', 'user.name', 'github-actions[bot]']);
+  await exec('git', [
+    'config',
+    'user.email',
+    '41898282+github-actions[bot]@users.noreply.github.com',
+  ]);
   await exec('git', ['checkout', '-b', prBranch]);
   await exec('git', ['add', '.']);
   await exec('git', ['commit', '-m', 'chore: update translations via Locadex']);
