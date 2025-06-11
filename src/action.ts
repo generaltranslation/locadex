@@ -4,7 +4,7 @@ import * as core from '@actions/core';
 import * as github from '@actions/github';
 import { exec } from '@actions/exec';
 
-const locadexVersion = '0.1.0-alpha.2';
+const locadexVersion = '0.1.0-alpha.3';
 
 export async function run(): Promise<void> {
   core.info('Locadex i18n action started');
