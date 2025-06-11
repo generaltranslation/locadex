@@ -24,7 +24,11 @@ export async function run(): Promise<void> {
     core.exportVariable('ANTHROPIC_API_KEY', apiKey);
 
     // Build command arguments
-    const args = ['npx', `locadex@${locadexVersion}`, 'i18n'];
+    const installArgs = ['npm', 'install', '-g', `locadex@${locadexVersion}`];
+    await exec(installArgs[0], installArgs.slice(1));
+
+    // Then run the command without npx
+    const args = ['locadex', 'i18n'];
 
     if (verbose) args.push('--verbose');
     if (debug) args.push('--debug');
@@ -74,15 +78,8 @@ async function createPR(githubToken: string): Promise<void> {
   const context = github.context;
   const octokit = github.getOctokit(githubToken);
   const currentBranch = context.ref.replace('refs/heads/', '');
-  const prBranch = `${currentBranch}/locadex`;
+  const prBranch = `locadex/${currentBranch}`;
 
-  // Configure git and commit
-  await exec('git', ['config', 'user.name', 'github-actions[bot]']);
-  await exec('git', [
-    'config',
-    'user.email',
-    '41898282+github-actions[bot]@users.noreply.github.com',
-  ]);
   await exec('git', ['checkout', '-b', prBranch]);
   await exec('git', ['add', '.']);
   await exec('git', ['commit', '-m', 'chore: update translations via Locadex']);

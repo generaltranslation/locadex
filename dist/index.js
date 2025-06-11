@@ -31741,7 +31741,10 @@ async function run() {
         // Set API key as environment variable
         _actions_core__WEBPACK_IMPORTED_MODULE_0__.exportVariable('ANTHROPIC_API_KEY', apiKey);
         // Build command arguments
-        const args = ['npx', `locadex@${locadexVersion}`, 'i18n'];
+        const installArgs = ['npm', 'install', '-g', `locadex@${locadexVersion}`];
+        await (0,_actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec)(installArgs[0], installArgs.slice(1));
+        // Then run the command without npx
+        const args = ['locadex', 'i18n'];
         if (verbose)
             args.push('--verbose');
         if (debug)
@@ -31787,14 +31790,7 @@ async function createPR(githubToken) {
     const context = _actions_github__WEBPACK_IMPORTED_MODULE_1__.context;
     const octokit = _actions_github__WEBPACK_IMPORTED_MODULE_1__.getOctokit(githubToken);
     const currentBranch = context.ref.replace('refs/heads/', '');
-    const prBranch = `${currentBranch}/locadex`;
-    // Configure git and commit
-    await (0,_actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec)('git', ['config', 'user.name', 'github-actions[bot]']);
-    await (0,_actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec)('git', [
-        'config',
-        'user.email',
-        '41898282+github-actions[bot]@users.noreply.github.com',
-    ]);
+    const prBranch = `locadex/${currentBranch}`;
     await (0,_actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec)('git', ['checkout', '-b', prBranch]);
     await (0,_actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec)('git', ['add', '.']);
     await (0,_actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec)('git', ['commit', '-m', 'chore: update translations via Locadex']);
