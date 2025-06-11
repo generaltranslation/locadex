@@ -31778,6 +31778,39 @@ async function run() {
         _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(`Action failed with error: ${error}`);
     }
 }
+async function findAvailableBranchName(baseName) {
+    let branchName = baseName;
+    let counter = 1;
+    while (true) {
+        try {
+            await (0,_actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec)('git', [
+                'show-ref',
+                '--verify',
+                '--quiet',
+                `refs/heads/${branchName}`,
+            ]);
+            branchName = `${baseName}-${counter}`;
+            counter++;
+        }
+        catch {
+            return branchName;
+        }
+    }
+}
+async function prExists(octokit, owner, repo, head) {
+    try {
+        const { data: prs } = await octokit.rest.pulls.list({
+            owner,
+            repo,
+            head: `${owner}:${head}`,
+            state: 'open',
+        });
+        return prs.length > 0;
+    }
+    catch {
+        return false;
+    }
+}
 async function createPR(githubToken, prBranch, prTitle, prBody) {
     // Check for changes using git status
     let hasChanges = false;
@@ -31799,17 +31832,23 @@ async function createPR(githubToken, prBranch, prTitle, prBody) {
         'user.email',
         '41898282+github-actions[bot]@users.noreply.github.com',
     ]);
-    await (0,_actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec)('git', ['checkout', '-b', prBranch]);
+    const availableBranchName = await findAvailableBranchName(prBranch);
+    await (0,_actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec)('git', ['checkout', '-b', availableBranchName]);
     await (0,_actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec)('git', ['add', '.']);
     await (0,_actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec)('git', ['commit', '-m', 'chore(locadex): update code']);
-    await (0,_actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec)('git', ['push', 'origin', prBranch]);
+    await (0,_actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec)('git', ['push', 'origin', availableBranchName]);
+    const prAlreadyExists = await prExists(octokit, context.repo.owner, context.repo.repo, availableBranchName);
+    if (prAlreadyExists) {
+        _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`PR already exists for branch ${availableBranchName}, skipping PR creation`);
+        return;
+    }
     // Create PR
     const { data: pr } = await octokit.rest.pulls.create({
         owner: context.repo.owner,
         repo: context.repo.repo,
         title: prTitle,
         body: prBody,
-        head: prBranch,
+        head: availableBranchName,
         base: context.ref,
     });
     _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Created PR: ${pr.html_url}`);
