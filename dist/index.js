@@ -31724,6 +31724,7 @@ var __webpack_exports__ = {};
 
 
 
+const locadexVersion = '0.1.0-alpha.1';
 async function run() {
     _actions_core__WEBPACK_IMPORTED_MODULE_0__.info('Locadex i18n action started');
     try {
@@ -31740,7 +31741,7 @@ async function run() {
         // Set API key as environment variable
         _actions_core__WEBPACK_IMPORTED_MODULE_0__.exportVariable('ANTHROPIC_API_KEY', apiKey);
         // Build command arguments
-        const args = ['npx', 'locadex', 'i18n'];
+        const args = ['npx', `locadex@${locadexVersion}`, 'i18n'];
         if (verbose)
             args.push('--verbose');
         if (debug)
