@@ -7,7 +7,7 @@
   "scripts": {
     "build": "tsc",
     "build:clean": "rm -rf dist && npm run build",
-    "package": "npm run build:clean && ncc build dist/action.js -o dist",
+    "package": "npm run build:clean",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
