@@ -4,8 +4,6 @@ import * as core from '@actions/core';
 import * as github from '@actions/github';
 import { exec } from '@actions/exec';
 
-const locadexVersion = '0.1.0';
-
 export async function run(): Promise<void> {
   core.info('Locadex i18n action started');
   try {
@@ -20,6 +18,7 @@ export async function run(): Promise<void> {
     const noTelemetry = core.getBooleanInput('no_telemetry');
     const githubToken = core.getInput('github_token');
     const appDirectory = core.getInput('app_directory');
+    const version = core.getInput('version');
 
     // PR inputs
     const prBranch = core.getInput('pr_branch');
@@ -30,7 +29,7 @@ export async function run(): Promise<void> {
     core.exportVariable('ANTHROPIC_API_KEY', apiKey);
 
     // Build command arguments
-    const installArgs = ['npm', 'install', '-g', `locadex@${locadexVersion}`];
+    const installArgs = ['npm', 'install', '-g', `locadex@${version}`];
     await exec(installArgs[0], installArgs.slice(1));
 
     // Then run the command without npx
