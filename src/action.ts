@@ -19,7 +19,7 @@ export async function run(): Promise<void> {
     const extensions = core.getInput('extensions');
     const noTelemetry = core.getBooleanInput('no_telemetry');
     const githubToken = core.getInput('github_token');
-    const workingDirectory = core.getInput('root_directory');
+    const appDirectory = core.getInput('app_directory');
 
     // PR inputs
     const prBranch = core.getInput('pr_branch');
@@ -28,12 +28,6 @@ export async function run(): Promise<void> {
 
     // Set API key as environment variable
     core.exportVariable('ANTHROPIC_API_KEY', apiKey);
-
-    // Set working directory options
-    const execOptions = workingDirectory ? { cwd: workingDirectory } : {};
-    if (workingDirectory) {
-      core.info(`Running commands in directory: ${workingDirectory}`);
-    }
 
     // Build command arguments
     const installArgs = ['npm', 'install', '-g', `locadex@${locadexVersion}`];
@@ -59,11 +53,14 @@ export async function run(): Promise<void> {
     if (extensions) {
       args.push('--extensions', extensions);
     }
+    if (appDirectory) {
+      args.push('--app-dir', appDirectory);
+    }
 
     core.info(`Running command: ${args.join(' ')}`);
 
     // Execute the command
-    await exec(args[0], args.slice(1), execOptions);
+    await exec(args[0], args.slice(1));
 
     core.info('Locadex i18n action completed successfully');
 
