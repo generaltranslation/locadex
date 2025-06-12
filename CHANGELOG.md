@@ -1,5 +1,11 @@
 # locadex-action
 
+## 0.1.0
+
+### Minor Changes
+
+- [#36](https://github.com/generaltranslation/locadex/pull/36) [`ea4feb6`](https://github.com/generaltranslation/locadex/commit/ea4feb69992a48ea7500ff7ab65981a5f00b47a2) Thanks [@brian-lou](https://github.com/brian-lou)! - Locadex beta release
+
 ## 0.0.2
 
 ### Patch Changes
