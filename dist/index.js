@@ -31738,18 +31738,13 @@ async function run() {
         const extensions = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('extensions');
         const noTelemetry = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getBooleanInput('no_telemetry');
         const githubToken = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('github_token');
-        const workingDirectory = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('root_directory');
+        const appDirectory = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('app_directory');
         // PR inputs
         const prBranch = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('pr_branch');
         const prTitle = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('pr_title');
         const prBody = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('pr_body');
         // Set API key as environment variable
         _actions_core__WEBPACK_IMPORTED_MODULE_0__.exportVariable('ANTHROPIC_API_KEY', apiKey);
-        // Set working directory options
-        const execOptions = workingDirectory ? { cwd: workingDirectory } : {};
-        if (workingDirectory) {
-            _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Running commands in directory: ${workingDirectory}`);
-        }
         // Build command arguments
         const installArgs = ['npm', 'install', '-g', `locadex@${locadexVersion}`];
         await (0,_actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec)(installArgs[0], installArgs.slice(1));
@@ -31774,9 +31769,12 @@ async function run() {
         if (extensions) {
             args.push('--extensions', extensions);
         }
+        if (appDirectory) {
+            args.push('--app-dir', appDirectory);
+        }
         _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Running command: ${args.join(' ')}`);
         // Execute the command
-        await (0,_actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec)(args[0], args.slice(1), execOptions);
+        await (0,_actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec)(args[0], args.slice(1));
         _actions_core__WEBPACK_IMPORTED_MODULE_0__.info('Locadex i18n action completed successfully');
         await createPR(githubToken, prBranch, prTitle, prBody);
     }
