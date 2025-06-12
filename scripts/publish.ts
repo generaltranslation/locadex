@@ -29,7 +29,19 @@ process.chdir(path.join(import.meta.dirname, '..'));
 
   await exec('git', ['checkout', '--detach']);
   await exec('git', ['add', '--force', 'dist']);
-  await exec('git', ['commit', '-m', tag]);
+
+  // Check if there are changes to commit
+  const { exitCode: statusExitCode } = await getExecOutput(
+    'git',
+    ['diff', '--cached', '--quiet'],
+    {
+      ignoreReturnCode: true,
+    }
+  );
+
+  if (statusExitCode !== 0) {
+    await exec('git', ['commit', '-m', tag]);
+  }
 
   await exec('changeset', ['tag']);
 
