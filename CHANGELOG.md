@@ -1,5 +1,11 @@
 # locadex-action
 
+## 0.1.1
+
+### Patch Changes
+
+- [#39](https://github.com/generaltranslation/locadex/pull/39) [`044cf34`](https://github.com/generaltranslation/locadex/commit/044cf34d95996173143c75e9353a575ed9f7a394) Thanks [@brian-lou](https://github.com/brian-lou)! - Add version as a param
+
 ## 0.1.0
 
 ### Minor Changes
