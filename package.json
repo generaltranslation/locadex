@@ -14,7 +14,8 @@
     "lint": "eslint src/**/*.ts",
     "lint:fix": "eslint src/**/*.ts --fix",
     "format": "prettier --write .",
-    "release": "tsx scripts/publish.ts"
+    "release": "tsx scripts/publish.ts",
+    "changeset": "changeset"
   },
   "dependencies": {
     "@actions/core": "^1.11.1",
