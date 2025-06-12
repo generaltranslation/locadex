@@ -31724,7 +31724,6 @@ var __webpack_exports__ = {};
 
 
 
-const locadexVersion = '0.1.0';
 async function run() {
     _actions_core__WEBPACK_IMPORTED_MODULE_0__.info('Locadex i18n action started');
     try {
@@ -31739,6 +31738,7 @@ async function run() {
         const noTelemetry = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getBooleanInput('no_telemetry');
         const githubToken = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('github_token');
         const appDirectory = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('app_directory');
+        const version = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('version');
         // PR inputs
         const prBranch = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('pr_branch');
         const prTitle = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('pr_title');
@@ -31746,7 +31746,7 @@ async function run() {
         // Set API key as environment variable
         _actions_core__WEBPACK_IMPORTED_MODULE_0__.exportVariable('ANTHROPIC_API_KEY', apiKey);
         // Build command arguments
-        const installArgs = ['npm', 'install', '-g', `locadex@${locadexVersion}`];
+        const installArgs = ['npm', 'install', '-g', `locadex@${version}`];
         await (0,_actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec)(installArgs[0], installArgs.slice(1));
         // Then run the command without npx
         const args = ['locadex', 'i18n'];

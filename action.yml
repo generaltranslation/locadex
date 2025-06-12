@@ -40,6 +40,10 @@ inputs:
   app_directory:
     description: 'Relative path to the app (Next.js, React, etc.)'
     required: false
+  version:
+    description: 'Locadex version to use'
+    required: false
+    default: 'latest'
   pr_branch:
     description: 'Branch name for pull requests'
     required: false
