@@ -1,5 +1,11 @@
 # locadex-action
 
+## 0.1.2
+
+### Patch Changes
+
+- [#41](https://github.com/generaltranslation/locadex/pull/41) [`8036f1f`](https://github.com/generaltranslation/locadex/commit/8036f1ff2ce4c9585d7403ba938c46db0b85d6e2) Thanks [@brian-lou](https://github.com/brian-lou)! - Add env vars as flags to action
+
 ## 0.1.1
 
 ### Patch Changes
