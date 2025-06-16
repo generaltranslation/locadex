@@ -9,6 +9,12 @@ inputs:
   api_key:
     description: 'Locadex API key'
     required: true
+  gt_api_key:
+    description: 'General Translation API key'
+    required: false
+  gt_project_id:
+    description: 'General Translation project ID'
+    required: false
   batch_size:
     description: 'File batch size'
     required: false

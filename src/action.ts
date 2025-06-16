@@ -19,6 +19,8 @@ export async function run(): Promise<void> {
     const githubToken = core.getInput('github_token');
     const appDirectory = core.getInput('app_directory');
     const version = core.getInput('version');
+    const gtApiKey = core.getInput('gt_api_key');
+    const gtProjectId = core.getInput('gt_project_id');
 
     // PR inputs
     const prBranch = core.getInput('pr_branch');
@@ -28,8 +30,16 @@ export async function run(): Promise<void> {
     // Set API key as environment variable
     core.exportVariable('ANTHROPIC_API_KEY', apiKey);
 
+    if (gtApiKey) {
+      core.exportVariable('GT_API_KEY', gtApiKey);
+    }
+    if (gtProjectId) {
+      core.exportVariable('GT_PROJECT_ID', gtProjectId);
+    }
+
     // Build command arguments
     const installArgs = ['npm', 'install', '-g', `locadex@${version}`];
+    core.info(`Installing locadex@${version}...`);
     await exec(installArgs[0], installArgs.slice(1));
 
     // Then run the command without npx
