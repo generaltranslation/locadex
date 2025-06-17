@@ -1,5 +1,11 @@
 # locadex-action
 
+## 0.1.4
+
+### Patch Changes
+
+- [#45](https://github.com/generaltranslation/locadex/pull/45) [`d6b16c4`](https://github.com/generaltranslation/locadex/commit/d6b16c41948636ab27c30926bed4797dd4c40d2b) Thanks [@brian-lou](https://github.com/brian-lou)! - Add format flag
+
 ## 0.1.3
 
 ### Patch Changes
