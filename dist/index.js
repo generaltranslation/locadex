@@ -31736,17 +31736,27 @@ async function run() {
         const matchFiles = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('match_files');
         const extensions = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('extensions');
         const noTelemetry = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getBooleanInput('no_telemetry');
+        const noTranslate = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getBooleanInput('no_translate');
         const githubToken = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('github_token');
         const appDirectory = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('app_directory');
         const version = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('version');
+        const gtApiKey = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('gt_api_key');
+        const gtProjectId = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('gt_project_id');
         // PR inputs
         const prBranch = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('pr_branch');
         const prTitle = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('pr_title');
         const prBody = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('pr_body');
         // Set API key as environment variable
         _actions_core__WEBPACK_IMPORTED_MODULE_0__.exportVariable('ANTHROPIC_API_KEY', apiKey);
+        if (gtApiKey) {
+            _actions_core__WEBPACK_IMPORTED_MODULE_0__.exportVariable('GT_API_KEY', gtApiKey);
+        }
+        if (gtProjectId) {
+            _actions_core__WEBPACK_IMPORTED_MODULE_0__.exportVariable('GT_PROJECT_ID', gtProjectId);
+        }
         // Build command arguments
         const installArgs = ['npm', 'install', '-g', `locadex@${version}`];
+        _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Installing locadex@${version}...`);
         await (0,_actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec)(installArgs[0], installArgs.slice(1));
         // Then run the command without npx
         const args = ['locadex', 'i18n'];
@@ -31756,6 +31766,9 @@ async function run() {
             args.push('--debug');
         if (noTelemetry) {
             args.push('--no-telemetry');
+        }
+        if (noTranslate) {
+            args.push('--no-translate');
         }
         if (batchSize) {
             args.push('--batch-size', batchSize);

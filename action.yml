@@ -77,6 +77,10 @@ inputs:
 
       ---
       *Generated automatically by Locadex continuous i18n*
+  no_translate:
+    description: 'Disable automatic translation after updating files'
+    required: false
+    default: 'false'
 
 runs:
   using: 'node20'
