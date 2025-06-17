@@ -22,6 +22,7 @@ export async function run(): Promise<void> {
     const version = core.getInput('version');
     const gtApiKey = core.getInput('gt_api_key');
     const gtProjectId = core.getInput('gt_project_id');
+    const formatCmd = core.getInput('format_cmd');
 
     // PR inputs
     const prBranch = core.getInput('pr_branch');
@@ -53,6 +54,9 @@ export async function run(): Promise<void> {
     }
     if (noTranslate) {
       args.push('--no-translate');
+    }
+    if (formatCmd) {
+      args.push('--format-cmd', formatCmd);
     }
     if (batchSize) {
       args.push('--batch-size', batchSize);
