@@ -1,5 +1,11 @@
 # locadex-action
 
+## 0.1.3
+
+### Patch Changes
+
+- [#43](https://github.com/generaltranslation/locadex/pull/43) [`eeeb132`](https://github.com/generaltranslation/locadex/commit/eeeb13272dab559102329cb9f5599f9c4cbfaae0) Thanks [@brian-lou](https://github.com/brian-lou)! - Add no_translate flag option
+
 ## 0.1.2
 
 ### Patch Changes
