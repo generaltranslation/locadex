@@ -31742,6 +31742,7 @@ async function run() {
         const version = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('version');
         const gtApiKey = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('gt_api_key');
         const gtProjectId = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('gt_project_id');
+        const formatCmd = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('format_cmd');
         // PR inputs
         const prBranch = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('pr_branch');
         const prTitle = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('pr_title');
@@ -31769,6 +31770,9 @@ async function run() {
         }
         if (noTranslate) {
             args.push('--no-translate');
+        }
+        if (formatCmd) {
+            args.push('--format-cmd', formatCmd);
         }
         if (batchSize) {
             args.push('--batch-size', batchSize);

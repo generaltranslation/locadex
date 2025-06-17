@@ -81,6 +81,9 @@ inputs:
     description: 'Disable automatic translation after updating files'
     required: false
     default: 'false'
+  format_cmd:
+    description: 'Optional formatting command to run after updating files'
+    required: false
 
 runs:
   using: 'node20'
