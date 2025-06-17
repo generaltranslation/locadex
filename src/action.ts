@@ -16,6 +16,7 @@ export async function run(): Promise<void> {
     const matchFiles = core.getInput('match_files');
     const extensions = core.getInput('extensions');
     const noTelemetry = core.getBooleanInput('no_telemetry');
+    const noTranslate = core.getBooleanInput('no_translate');
     const githubToken = core.getInput('github_token');
     const appDirectory = core.getInput('app_directory');
     const version = core.getInput('version');
@@ -49,6 +50,9 @@ export async function run(): Promise<void> {
     if (debug) args.push('--debug');
     if (noTelemetry) {
       args.push('--no-telemetry');
+    }
+    if (noTranslate) {
+      args.push('--no-translate');
     }
     if (batchSize) {
       args.push('--batch-size', batchSize);
