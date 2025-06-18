@@ -73,9 +73,12 @@ export async function run(): Promise<void> {
     core.info(`Running command: ${args.join(' ')}`);
 
     // Execute the command
-    await exec(args[0], args.slice(1));
-
-    core.info('Locadex i18n action completed successfully');
+    const code = await exec(args[0], args.slice(1));
+    if (code !== 0) {
+      throw new Error(`Locadex failed with code ${code}`);
+    } else {
+      core.info('Locadex i18n action completed successfully');
+    }
 
     await createPR(githubToken, prBranch, prTitle, prBody);
   } catch (error) {

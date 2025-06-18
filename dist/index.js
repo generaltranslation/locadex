@@ -31787,8 +31787,13 @@ async function run() {
         }
         _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Running command: ${args.join(' ')}`);
         // Execute the command
-        await (0,_actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec)(args[0], args.slice(1));
-        _actions_core__WEBPACK_IMPORTED_MODULE_0__.info('Locadex i18n action completed successfully');
+        const code = await (0,_actions_exec__WEBPACK_IMPORTED_MODULE_2__.exec)(args[0], args.slice(1));
+        if (code !== 0) {
+            throw new Error(`Locadex failed with code ${code}`);
+        }
+        else {
+            _actions_core__WEBPACK_IMPORTED_MODULE_0__.info('Locadex i18n action completed successfully');
+        }
         await createPR(githubToken, prBranch, prTitle, prBody);
     }
     catch (error) {
