@@ -1,5 +1,11 @@
 # locadex-action
 
+## 0.1.7
+
+### Patch Changes
+
+- [#52](https://github.com/generaltranslation/locadex/pull/52) [`489e1ed`](https://github.com/generaltranslation/locadex/commit/489e1ed60dbe7e5cbc728680216d4af3a4f086e3) Thanks [@brian-lou](https://github.com/brian-lou)! - Add failure case for locadex cmd
+
 ## 0.1.6
 
 ### Patch Changes
