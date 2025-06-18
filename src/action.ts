@@ -14,7 +14,6 @@ export async function run(): Promise<void> {
     const verbose = core.getBooleanInput('verbose');
     const debug = core.getBooleanInput('debug');
     const matchFiles = core.getInput('match_files');
-    const extensions = core.getInput('extensions');
     const noTelemetry = core.getBooleanInput('no_telemetry');
     const noTranslate = core.getBooleanInput('no_translate');
     const githubToken = core.getInput('github_token');
@@ -56,7 +55,7 @@ export async function run(): Promise<void> {
       args.push('--no-translate');
     }
     if (formatCmd) {
-      args.push('--format-cmd', formatCmd);
+      args.push('--format-cmd', `"${formatCmd}"`);
     }
     if (batchSize) {
       args.push('--batch-size', batchSize);
@@ -65,13 +64,10 @@ export async function run(): Promise<void> {
       args.push('--concurrency', maxConcurrent);
     }
     if (matchFiles) {
-      args.push('--match-files', matchFiles);
-    }
-    if (extensions) {
-      args.push('--extensions', extensions);
+      args.push('--match-files', `"${matchFiles}"`);
     }
     if (appDirectory) {
-      args.push('--app-dir', appDirectory);
+      args.push('--app-dir', `"${appDirectory}"`);
     }
 
     core.info(`Running command: ${args.join(' ')}`);

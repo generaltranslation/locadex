@@ -36,9 +36,6 @@ inputs:
   match_files:
     description: 'Comma-separated list of glob patterns to match source files'
     required: false
-  extensions:
-    description: 'Comma-separated list of file extensions to match'
-    required: false
   github_token:
     description: 'GitHub token for creating pull requests'
     required: false
