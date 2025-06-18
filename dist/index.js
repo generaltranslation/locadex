@@ -31734,7 +31734,6 @@ async function run() {
         const verbose = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getBooleanInput('verbose');
         const debug = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getBooleanInput('debug');
         const matchFiles = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('match_files');
-        const extensions = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('extensions');
         const noTelemetry = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getBooleanInput('no_telemetry');
         const noTranslate = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getBooleanInput('no_translate');
         const githubToken = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput('github_token');
@@ -31772,7 +31771,7 @@ async function run() {
             args.push('--no-translate');
         }
         if (formatCmd) {
-            args.push('--format-cmd', formatCmd);
+            args.push('--format-cmd', `"${formatCmd}"`);
         }
         if (batchSize) {
             args.push('--batch-size', batchSize);
@@ -31781,13 +31780,10 @@ async function run() {
             args.push('--concurrency', maxConcurrent);
         }
         if (matchFiles) {
-            args.push('--match-files', matchFiles);
-        }
-        if (extensions) {
-            args.push('--extensions', extensions);
+            args.push('--match-files', `"${matchFiles}"`);
         }
         if (appDirectory) {
-            args.push('--app-dir', appDirectory);
+            args.push('--app-dir', `"${appDirectory}"`);
         }
         _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Running command: ${args.join(' ')}`);
         // Execute the command
