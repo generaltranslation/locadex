@@ -31771,7 +31771,7 @@ async function run() {
             args.push('--no-translate');
         }
         if (formatCmd) {
-            args.push('--format-cmd', `"${formatCmd}"`);
+            args.push('--format-cmd', formatCmd);
         }
         if (batchSize) {
             args.push('--batch-size', batchSize);
@@ -31780,10 +31780,10 @@ async function run() {
             args.push('--concurrency', maxConcurrent);
         }
         if (matchFiles) {
-            args.push('--match-files', `"${matchFiles}"`);
+            args.push('--match-files', matchFiles);
         }
         if (appDirectory) {
-            args.push('--app-dir', `"${appDirectory}"`);
+            args.push('--app-dir', appDirectory);
         }
         _actions_core__WEBPACK_IMPORTED_MODULE_0__.info(`Running command: ${args.join(' ')}`);
         // Execute the command

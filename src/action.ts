@@ -55,7 +55,7 @@ export async function run(): Promise<void> {
       args.push('--no-translate');
     }
     if (formatCmd) {
-      args.push('--format-cmd', `"${formatCmd}"`);
+      args.push('--format-cmd', formatCmd);
     }
     if (batchSize) {
       args.push('--batch-size', batchSize);
@@ -64,10 +64,10 @@ export async function run(): Promise<void> {
       args.push('--concurrency', maxConcurrent);
     }
     if (matchFiles) {
-      args.push('--match-files', `"${matchFiles}"`);
+      args.push('--match-files', matchFiles);
     }
     if (appDirectory) {
-      args.push('--app-dir', `"${appDirectory}"`);
+      args.push('--app-dir', appDirectory);
     }
 
     core.info(`Running command: ${args.join(' ')}`);
