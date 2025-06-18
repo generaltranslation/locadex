@@ -1,5 +1,11 @@
 # locadex-action
 
+## 0.1.6
+
+### Patch Changes
+
+- [#50](https://github.com/generaltranslation/locadex/pull/50) [`0b631d3`](https://github.com/generaltranslation/locadex/commit/0b631d343dc225818de29a135a94a18987a5b361) Thanks [@brian-lou](https://github.com/brian-lou)! - Revert flag escaping change
+
 ## 0.1.5
 
 ### Patch Changes
