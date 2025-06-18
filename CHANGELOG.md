@@ -1,5 +1,11 @@
 # locadex-action
 
+## 0.1.5
+
+### Patch Changes
+
+- [#47](https://github.com/generaltranslation/locadex/pull/47) [`766781e`](https://github.com/generaltranslation/locadex/commit/766781e1d88b9a38cd59d6c6cab64689846a45fe) Thanks [@brian-lou](https://github.com/brian-lou)! - Properly escape CLI flags
+
 ## 0.1.4
 
 ### Patch Changes
