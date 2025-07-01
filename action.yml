@@ -46,7 +46,7 @@ inputs:
   version:
     description: 'Locadex version to use'
     required: false
-    default: 'latest'
+    default: '0.1.17'
   pr_branch:
     description: 'Branch name for pull requests'
     required: false
