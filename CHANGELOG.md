@@ -1,5 +1,11 @@
 # locadex-action
 
+## 0.1.8
+
+### Patch Changes
+
+- [#54](https://github.com/generaltranslation/locadex/pull/54) [`2b061b5`](https://github.com/generaltranslation/locadex/commit/2b061b55bab39b521f014b91de1c1867309c2dfc) Thanks [@brian-lou](https://github.com/brian-lou)! - Change default version
+
 ## 0.1.7
 
 ### Patch Changes
